@@ -5,8 +5,16 @@ from tkinter import *
 import time, sys
 
 ver = 'Clock 0.0.0\nCopyright 2017 Cabbage All Rights Reserved.'
-
+help = '''
+<<HELP>>
+-c [color]   : Set color of text [color].
+-b [color]   : Set color of background [color].
+-h or --help : Show this help and exit.
+-v           : Show version and exit.'''
 print(ver)
+if '-h' in sys.argv or '--help' in sys.argv:
+    print(help)
+    exit()
 
 if '-v' in sys.argv:
     exit()
