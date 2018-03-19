@@ -1,5 +1,6 @@
 #coding: utf-8
-#Clock
+#Clock 0.0.0
+#Copyright 2017 Cabbage All Rights Reserved.
 
 from tkinter import *
 import time, sys
