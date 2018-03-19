@@ -1,5 +1,15 @@
+#coding: utf-8
+#Clock
+
 from tkinter import *
 import time, sys
+
+ver = 'Clock 0.0.0\nCopyright 2017 Cabbage All Rights Reserved.'
+
+print(ver)
+
+if '-v' in sys.argv:
+    exit()
 
 tk = Tk()
 tk.title('Clock')
@@ -10,7 +20,6 @@ tk.update()
 def readargs():
     global textcolor
     global backgroundcolor
-    global printdebug
     arg = sys.argv
     textcolor = 'black'
     if '-c' in arg:
@@ -18,7 +27,6 @@ def readargs():
     backgroundcolor = 'white'
     if '-b' in arg:
         backgroundcolor = arg[(arg.index('-b') + 1)]
-    printdebug = False
 
 def sk(i):
     sa = str(i)
