@@ -51,7 +51,6 @@ tk.update()
 tk.resizable(0, 0) # 画面サイズ変更を禁止
 tk.iconbitmap(tk, 'lettuce.ico')
 
-
 def readargs():
     global textcolor
     global backgroundcolor
