@@ -42,14 +42,15 @@ if '-s' in sys.argv:
 #Source Code Pro Medium : 450, 65/220,30
 #7barSPBd               : 360, 80/180,50
 #FuxedSys               : 320, 70/160, 35
-
-
+#メニューバーで+20
 tk = Tk()
-tk.title('Clock')
-ca = Canvas(tk, width=320, height=70)
+tk.title('CabbageClock')
+ca = Canvas(tk, width=320, height=90)
 ca.pack()
 tk.update()
 tk.resizable(0, 0) # 画面サイズ変更を禁止
+tk.iconbitmap(tk, 'lettuce.ico')
+
 
 def readargs():
     global textcolor
@@ -131,6 +132,12 @@ ca.bind_all('<KeyPress-F11>', ev)
 ca.bind_all('<Escape>', ev)
 
 start()
+
+menubar = Menu(tk)
+filemenu = Menu(menubar, tearoff=0)
+filemenu.add_command(label="Exit", command=tk.destroy)
+menubar.add_cascade(label="File", menu=filemenu)
+tk.config(menu=menubar)
 
 while True:
     if netcheck:
