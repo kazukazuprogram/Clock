@@ -34,19 +34,11 @@ class MyNTPClient(object):
 #s2csntp.miz.nao.ac.jp
 #ntp.ring.gr.jp
 
-def getdate(n):
+def getdate():
     ntp_client = MyNTPClient('ntp.nict.jp')
     da = ntp_client.get_nowtime()
-    print(da)
-    db = da.split(' ')
-    dca = db[0].split('/')
-    dcb = db[1].split(':')
-    data = dca + dcb
-    if n == 0:
-        re = data
-    elif n == 1:
-        re = db[1]
-    return re
+    return da
+
 
 if __name__ == '__main__':
-    print(getdate(1))
+    print(getdate())
