@@ -28,7 +28,7 @@ def readargs():
         netcheck = True
         print('Sync time for Internet.')
     if '--fullscreen' in arg:
-        tk.attributes("-fullscreen", True)
+        tk.attributes('-fullscreen', True)
 
 def sk(i):
     sa = str(i)
@@ -36,15 +36,34 @@ def sk(i):
         sa = '0' + sa
     return sa
 
+def chfont1():
+    face = 'Source Code Pro Medium'
+    print(face)
+
+def chfont2():
+    face = '7barSPBd'
+    print(face)
+
+def chfont3():
+    face = 'FuxedSys'
+    print(face)
+
 def cm():
     global tk
     menubar = Menu(tk)
     filemenu = Menu(menubar, tearoff=0)
+    fontmenu = Menu(menubar, tearoff=0)
+    fontchangemenu = Menu(fontmenu, tearoff=0)
     helpmenu = Menu(menubar, tearoff=0)
-    filemenu.add_command(label="Exit", command=exit_program)
-    menubar.add_cascade(label="File", menu=filemenu)
-    helpmenu.add_command(label="About", command=show_version)
-    menubar.add_cascade(label="Help", menu=helpmenu)
+    filemenu.add_command(label='Exit', command=exit_program)
+    menubar.add_cascade(label='File', menu=filemenu)
+    fontchangemenu.add_command(label='Source Code Pro Medium', command=chfont1)
+    fontchangemenu.add_command(label='7barSPBd', command=chfont2)
+    fontchangemenu.add_command(label='FuxedSys', command=chfont3)
+    menubar.add_cascade(label='Font', menu=fontmenu)
+    fontmenu.add_cascade(label='Change...', menu=fontchangemenu)
+    helpmenu.add_command(label='About', command=show_version)
+    menubar.add_cascade(label='Help', menu=helpmenu)
     tk.config(menu=menubar)
 
 def exit_program():
@@ -96,6 +115,8 @@ def start():
         exit()
     if '-v' in sys.argv:
         exit()
+    #=============================================================================================
+    #Start GUI
     tk = Tk()
     tk.title('CabbageClock')
     ca = Canvas(tk, width=320, height=90)
@@ -103,6 +124,8 @@ def start():
     tk.update()
     tk.resizable(0, 0) # 画面サイズ変更を禁止
     tk.iconbitmap(tk, 'cabbage.ico')
+    # Fin Start GUI
+    #=============================================================================================
     textsize = 50
     if '-s' in sys.argv:
         textsize = int(sys.argv[sys.argv.index('-s') + 1])
