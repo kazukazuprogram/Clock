@@ -6,7 +6,7 @@
 
 from tkinter import *
 import time, sys
-sys.setrecursionlimit(10000)
+#sys.setrecursionlimit(10000)
 
 #Source Code Pro Medium : 450, 60/225,30
 #7barSPBd               : 360, 80/180,50
@@ -105,7 +105,8 @@ def show_version():
     vca = Canvas(vtk, width=300, height=300, bg='white')
     vca.pack()
     #vtk.iconbitmap(vtk, 'lettuce.ico')
-    vca
+    vid = [vca.create_image(150, 100, image=PhotoImage(file='lettuce.ico'))]
+    vtk.update()
 
 def start():
     global tk
