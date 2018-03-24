@@ -39,7 +39,7 @@ def sk(i):
 
 def fpma(fontname_a):
     if fontname_a == 'Source Code Pro Medium':
-        ft = [225, 30]
+        ft = [225, 40]
     elif fontname_a =='7barSPBd':
         ft = [180, 50]
     elif fontname_a == 'FuxedSys':
@@ -47,21 +47,32 @@ def fpma(fontname_a):
     return ft
 
 def fpm(fontface):
-    pass
+    nx = fpma(fontname)[0]
+    ny = fpma(fontname)[1]
+    mx = fpma(fontface)[0]
+    my = fpma(fontface)[1]
+    if fontface == '7barSPBd':
+        ca.configure(width=mx * 2, height=my * 2 - 20)
+    else:
+        ca.configure(width=mx * 2, height=my * 2)
+    ca.move(id, (mx - nx), (my - ny))
+    tk.update()
 
 def chfont1():
     global fontname
+    fpm('Source Code Pro Medium')
     fontname = 'Source Code Pro Medium'
     ca.itemconfig(id, font=(fontname, textsize))
-    ca.move()
 
 def chfont2():
     global fontname
+    fpm('7barSPBd')
     fontname = '7barSPBd'
     ca.itemconfig(id, font=(fontname, textsize))
 
 def chfont3():
     global fontname
+    fpm('FuxedSys')
     fontname = 'FuxedSys'
     ca.itemconfig(id, font=(fontname, textsize))
 
@@ -106,6 +117,7 @@ def start():
     global printdebug
     global textsize
     global netcheck
+    global fontname
     global fs
     global tf
     ver = 'Clock 0.0.0\nCopyright 2017 Cabbage All Rights Reserved.'
