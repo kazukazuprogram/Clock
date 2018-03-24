@@ -6,8 +6,9 @@
 
 from tkinter import *
 import time, sys
+sys.setrecursionlimit(10000)
 
-#Source Code Pro Medium : 450, 65/220,30
+#Source Code Pro Medium : 450, 60/225,30
 #7barSPBd               : 360, 80/180,50
 #FuxedSys               : 320, 70/160, 35
 #メニューバーで+20
@@ -36,32 +37,48 @@ def sk(i):
         sa = '0' + sa
     return sa
 
+def fpma(fontname_a):
+    if fontname_a == 'Source Code Pro Medium':
+        ft = [225, 30]
+    elif fontname_a =='7barSPBd':
+        ft = [180, 50]
+    elif fontname_a == 'FuxedSys':
+        ft = [160, 35]
+    return ft
+
+def fpm(fontface):
+    
+
 def chfont1():
-    face = 'Source Code Pro Medium'
-    print(face)
+    global fontname
+    fontname = 'Source Code Pro Medium'
+    ca.itemconfig(id, font=(fontname, textsize))
+    ca.move()
 
 def chfont2():
-    face = '7barSPBd'
-    print(face)
+    global fontname
+    fontname = '7barSPBd'
+    ca.itemconfig(id, font=(fontname, textsize))
 
 def chfont3():
-    face = 'FuxedSys'
-    print(face)
+    global fontname
+    fontname = 'FuxedSys'
+    ca.itemconfig(id, font=(fontname, textsize))
 
 def cm():
     global tk
     menubar = Menu(tk)
-    filemenu = Menu(menubar, tearoff=0)
+    FileMenu = Menu(menubar, tearoff=0)
     fontmenu = Menu(menubar, tearoff=0)
-    fontchangemenu = Menu(fontmenu, tearoff=0)
+    FontChangeMenu = Menu(fontmenu, tearoff=0)
     helpmenu = Menu(menubar, tearoff=0)
-    filemenu.add_command(label='Exit', command=exit_program)
-    menubar.add_cascade(label='File', menu=filemenu)
-    fontchangemenu.add_command(label='Source Code Pro Medium', command=chfont1)
-    fontchangemenu.add_command(label='7barSPBd', command=chfont2)
-    fontchangemenu.add_command(label='FuxedSys', command=chfont3)
+    FileMenu.add_command(label='Exit', command=exit_program)
+    menubar.add_cascade(label='File', menu=FileMenu)
+    FontChangeMenu.add_command(label='Source Code Pro Medium', command=chfont1)
+    FontChangeMenu.add_command(label='7barSPBd', command=chfont2)
+    FontChangeMenu.add_command(label='FuxedSys', command=chfont3)
     menubar.add_cascade(label='Font', menu=fontmenu)
-    fontmenu.add_cascade(label='Change...', menu=fontchangemenu)
+    fontmenu.add_cascade(label='Change...', menu=FontChangeMenu)
     helpmenu.add_command(label='About', command=show_version)
     menubar.add_cascade(label='Help', menu=helpmenu)
     tk.config(menu=menubar)
@@ -73,9 +90,11 @@ def exit_program():
 
 def show_version():
     vtk = Tk()
-    vca = Canvas(vtk, width=100, height=100)
-    ca.pack()
-    vtk.iconbitmap(vtk, 'lettuce.ico')
+    vtk.title('About')
+    vca = Canvas(vtk, width=300, height=300, bg='white')
+    vca.pack()
+    #vtk.iconbitmap(vtk, 'lettuce.ico')
+    vca
 
 def start():
     global tk
@@ -115,11 +134,13 @@ def start():
         exit()
     if '-v' in sys.argv:
         exit()
+    readargs()
     #=============================================================================================
     #Start GUI
     tk = Tk()
-    tk.title('CabbageClock')
-    ca = Canvas(tk, width=320, height=90)
+    #tk.title('CabbageClock')
+    tk.title('Clock')
+    ca = Canvas(tk, width=320, height=90, bg=backgroundcolor)
     ca.pack()
     tk.update()
     tk.resizable(0, 0) # 画面サイズ変更を禁止
@@ -129,8 +150,7 @@ def start():
     textsize = 50
     if '-s' in sys.argv:
         textsize = int(sys.argv[sys.argv.index('-s') + 1])
-    readargs()
-    del_id = [ca.create_rectangle(0, 0, 500, 500, fill=backgroundcolor)]
+    #del_id = [ca.create_rectangle(0, 0, 500, 500, fill=backgroundcolor)]
     textsize = 70
     #fontname = '7barSPBd'
     #fontname = 'Source Code Pro Medium'
