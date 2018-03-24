@@ -47,7 +47,7 @@ def fpma(fontname_a):
     return ft
 
 def fpm(fontface):
-    
+    pass
 
 def chfont1():
     global fontname
