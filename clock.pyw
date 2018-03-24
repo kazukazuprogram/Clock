@@ -105,7 +105,8 @@ def show_version():
     vca = Canvas(vtk, width=300, height=300, bg='white')
     vca.pack()
     #vtk.iconbitmap(vtk, 'lettuce.ico')
-    vid = [vca.create_image(150, 100, image=PhotoImage(file='lettuce.ico'))]
+    i = PhotoImage(file='cabbage.gif')
+    vid = [vca.create_image(150, 100, image=i)]
     vtk.update()
 
 def start():
