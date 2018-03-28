@@ -113,23 +113,18 @@ def start():
     global fs
     global tf
     global fontname_mae
-    ver = 'Clock 0.0.0\nCopyright 2017 Cabbage All Rights Reserved.'
-    help = '''<<HELP>>
--c [color]            : Set color of text [color].
--b [color]            : Set color of background [color].
--v                    : Show version and exit.
--f [FONT]             : Set font of text [FONT]
---fullscreen          : Fullscreen.
--h or --help          : Show this help and exit.
--H or --japanese-help : Show Japanese help and exit.'''
-    jhelp = '''<<ヘルプ>>
--c [color]                  : 文字色を[color]にします。
--b [color]                  : 背景色を[color]にします。
--v                          : バージョンを表示し、終了します。
--f [FONT]                   : フォントを[FONT]にします。
---fullscreen                : 画面をフルスクリーン表示にします。
--h もしくは --help          : 英語のヘルプを表示し、終了します。
--H もしくは --japanese-help : このヘルプを表示し、終了します。'''
+    with open('help\\ver') as fv:
+        ver = fv.read()
+    with open('help\\en') as fen:
+        help = fen.read()
+    try:
+        with open('help\\jp', 'r', 'ansi') as fjp:
+            jhelp = fjp.read()
+    except:
+        jhelp = ''
+        print('Can\'t open file "help\\jp"')
+    finally:
+        pass
     print(ver)
     if '-h' in sys.argv or '--help' in sys.argv:
         print(help)
@@ -203,7 +198,6 @@ def ev(event):
 
 def main():
     start()
-    print(fontname.get())
     while True:
         if netcheck:
             crv()

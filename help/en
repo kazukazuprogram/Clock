@@ -1,0 +1,8 @@
+<<HELP>>
+-c [color]            : Set color of text [color].
+-b [color]            : Set color of background [color].
+-v                    : Show version and exit.
+-f [FONT]             : Set font of text [FONT]
+--fullscreen          : Fullscreen.
+-h or --help          : Show this help and exit.
+-H or --japanese-help : Show Japanese help and exit.
