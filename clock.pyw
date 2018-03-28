@@ -46,35 +46,24 @@ def fpma(fontname_a):
         ft = [160, 35]
     return ft
 
-def fpm(fontface):
-    nx = fpma(fontname)[0]
-    ny = fpma(fontname)[1]
-    mx = fpma(fontface)[0]
-    my = fpma(fontface)[1]
-    if fontface == '7barSPBd':
+def fpm():
+    nx = fpma(fontname_mae)[0]
+    ny = fpma(fontname_mae)[1]
+    mx = fpma(fontname.get())[0]
+    my = fpma(fontname.get())[1]
+    if fontname.get() == '7barSPBd':
         ca.configure(width=mx * 2, height=my * 2 - 20)
     else:
         ca.configure(width=mx * 2, height=my * 2)
     ca.move(id, (mx - nx), (my - ny))
     tk.update()
 
-def chfont1():
-    global fontname
-    fpm('Source Code Pro Medium')
-    fontname = 'Source Code Pro Medium'
-    ca.itemconfig(id, font=(fontname, textsize))
-
-def chfont2():
-    global fontname
-    fpm('7barSPBd')
-    fontname = '7barSPBd'
-    ca.itemconfig(id, font=(fontname, textsize))
-
-def chfont3():
-    global fontname
-    fpm('FuxedSys')
-    fontname = 'FuxedSys'
-    ca.itemconfig(id, font=(fontname, textsize))
+def chfont():
+    global fontname_mae
+    print('Change font : ' + fontname_mae + ' >> ' + fontname.get())
+    fpm()
+    ca.itemconfig(id, font=(fontname.get(), textsize))
+    fontname_mae = fontname.get()
 
 def cm():
     global tk
@@ -85,9 +74,10 @@ def cm():
     helpmenu = Menu(menubar, tearoff=0)
     FileMenu.add_command(label='Exit', command=exit_program)
     menubar.add_cascade(label='File', menu=FileMenu)
-    FontChangeMenu.add_command(label='Source Code Pro Medium', command=chfont1)
-    FontChangeMenu.add_command(label='7barSPBd', command=chfont2)
-    FontChangeMenu.add_command(label='FuxedSys', command=chfont3)
+    FontChangeMenu.add_radiobutton(label='Source Code Pro Medium', variable=fontname, \
+    value='Source Code Pro Medium', command=chfont)
+    FontChangeMenu.add_radiobutton(label='7barSPBd', variable=fontname, value='7barSPBd', command=chfont)
+    FontChangeMenu.add_radiobutton(label='FuxedSys', variable=fontname, value='FuxedSys', command=chfont)
     menubar.add_cascade(label='Font', menu=fontmenu)
     fontmenu.add_cascade(label='Change...', menu=FontChangeMenu)
     helpmenu.add_command(label='About', command=show_version)
@@ -99,20 +89,20 @@ def exit_program():
     tf = True
     tk.destroy()
 
+#About
 def show_version():
-    vtk = Tk()
+    vtk = Toplevel()
     vtk.title('About')
     vca = Canvas(vtk, width=300, height=300, bg='white')
     vca.pack()
-    #vtk.iconbitmap(vtk, 'lettuce.ico')
+    #vtk.iconbitmap(vtk, 'icon\\lettuce.ico')
     i = PhotoImage(file='cabbage.gif')
-    vid = [vca.create_image(150, 100, image=i)]
+    vid = [vca.create_image(150, 100, anchor='nw', image=i)]
     vtk.update()
 
 def start():
     global tk
     global ca
-    global del_id
     global id
     global textcolor
     global backgroundcolor
@@ -122,6 +112,7 @@ def start():
     global fontname
     global fs
     global tf
+    global fontname_mae
     ver = 'Clock 0.0.0\nCopyright 2017 Cabbage All Rights Reserved.'
     help = '''<<HELP>>
 -c [color]            : Set color of text [color].
@@ -149,29 +140,31 @@ def start():
     if '-v' in sys.argv:
         exit()
     readargs()
+    #fontname_k = 'Source Code Pro Medium'
+    #fontname_k = '7barSPBd'
+    fontname_k = 'FuxedSys'
     #=============================================================================================
     #Start GUI
     tk = Tk()
     #tk.title('CabbageClock')
     tk.title('Clock')
-    ca = Canvas(tk, width=320, height=90, bg=backgroundcolor)
+    ca = Canvas(tk, width=(fpma(fontname_k)[0] * 2), height=((fpma(fontname_k)[1] * 2) + 20), bg=backgroundcolor)
     ca.pack()
     tk.update()
     tk.resizable(0, 0) # 画面サイズ変更を禁止
-    tk.iconbitmap(tk, 'cabbage.ico')
+    tk.iconbitmap(tk, 'icon\\cabbage.ico')
     # Fin Start GUI
     #=============================================================================================
-    textsize = 50
+    fontname = StringVar()
+    fontname.set(fontname_k)
+    fontname_mae = fontname.get()
+    if '-f' in sys.argv:
+        fontname.set(sys.argv[sys.argv.index('-f') + 1])
+    textsize = 70
     if '-s' in sys.argv:
         textsize = int(sys.argv[sys.argv.index('-s') + 1])
     #del_id = [ca.create_rectangle(0, 0, 500, 500, fill=backgroundcolor)]
-    textsize = 70
-    #fontname = '7barSPBd'
-    #fontname = 'Source Code Pro Medium'
-    fontname = 'FuxedSys'
-    if '-f' in sys.argv:
-        fontname = sys.argv[sys.argv.index('-f') + 1]
-    id = ca.create_text(160, 35, text='', fill=textcolor, font=(fontname, textsize))
+    id = ca.create_text(fpma(fontname.get())[0], fpma(fontname.get())[1], text='', fill=textcolor, font=(fontname.get(), textsize))
     fs = False
     tk.attributes('-topmost', True)
     #時間調整
@@ -183,7 +176,6 @@ def start():
     tf = False
     ca.bind_all('<KeyPress-F11>', ev)
     ca.bind_all('<Escape>', ev)
-    ca.bind_all('<KeyPress-q>', exit_program)
     cm()
 
 def rv():
@@ -211,6 +203,7 @@ def ev(event):
 
 def main():
     start()
+    print(fontname.get())
     while True:
         if netcheck:
             crv()
