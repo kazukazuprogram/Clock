@@ -1,4 +1,4 @@
-pyinstaller -w -F clock.pyw
+pyinstaller -w -F --onefile clock.pyw
 copy dist\clock.exe . /Y
 rd build /s /q
 rd dist /s /q
