@@ -5,7 +5,7 @@
 #python C:\Users\owner\code\Clock\clock.pyw
 
 from tkinter import *
-import time, sys
+import time, sys, os
 #sys.setrecursionlimit(10000)
 
 #Source Code Pro Medium : 450, 60/225,30
@@ -88,16 +88,64 @@ def exit_program():
     global tf
     tf = True
     tk.destroy()
+    saveconf('clock.conf', ['font'], [fontname.get()])
+
+def getconf(path):
+    with open(path) as cf:
+        r = cf.read()
+    ra = r.split('\n')
+    rb = list()
+    for b in range(0, len(ra)):
+        if not '#' in ra[b]  or ra[b] != '' :
+            rb.append(ra[b])
+    rc = list()
+    rd = list()
+    for c in range(0, len(rb)):
+        rc.append(rb[c].split(' ')[0])
+        rd.append(' '.join(rb[c].split(' ')[1:]))
+    return [rc, rd]
+
+def saveconf(path, name, value):
+    if not os.path.isfile(path): # ファイルが存在しない場合
+        la = list()
+        for a in range(0, len(name)):
+            la.append((name[a] + ' ' + value[a]))
+        lb = '\n'.join(la)
+        with open(path, 'w') as wcf:
+            wcf.write(lb)
+    else: # ファイルが存在する場合
+        wl = getconf('clock.conf')
+        wla = wl[0]
+        wlb = wl[1]
+        for wb in range(0, len(name)):
+            if name[wb] in wla:
+                for wc in range(0, len(wla)):
+                    if name[wb] == wla[wc]:
+                        wlb[wc] = value[wb]
+                        break
+            else:
+                wla.append(name[wb])
+                wlb.append(value[wb])
+        wlc = list()
+        for wd in range(0, len(wla)):
+            wlc.append(wla[wd] + ' ' + wlb[wd])
+        wld = '\n'.join(wlc)
+        with open(path, 'w') as wcfa:
+            wcfa.write(wld)
 
 #About
 def show_version():
     vtk = Toplevel()
     vtk.title('About')
-    vca = Canvas(vtk, width=300, height=300, bg='white')
+    vca = Canvas(vtk, width=300, height=230, bg='white')
     vca.pack()
-    #vtk.iconbitmap(vtk, 'icon\\lettuce.ico')
-    i = PhotoImage(file='cabbage.gif')
-    vid = [vca.create_image(150, 100, anchor='nw', image=i)]
+    i = PhotoImage(file='cabbage.png')
+    vid = [vca.create_image(150, 80, image=i),
+    vca.create_text(150, 170, text='Cabbage Clock', font=('Helvetica', 30)),
+    vca.create_text(150, 215, text=ver)]
+    vtk.attributes('-topmost', True)
+    vtk.resizable(0, 0) # 画面サイズ変更を禁止
+    raise
     vtk.update()
 
 def start():
@@ -113,16 +161,24 @@ def start():
     global fs
     global tf
     global fontname_mae
+    global ver
     with open('help\\ver') as fv:
         ver = fv.read()
     with open('help\\en') as fen:
         help = fen.read()
     try:
-        with open('help\\jp', 'r', 'ansi') as fjp:
+        with open('help\\jp', 'r', 'utf-8') as fjp:
             jhelp = fjp.read()
     except:
-        jhelp = ''
-        print('Can\'t open file "help\\jp"')
+        jhelp = '''<<ヘルプ>>
+-c [color]                  : 文字色を[color]にします。
+-b [color]                  : 背景色を[color]にします。
+-v                          : バージョンを表示し、終了します。
+-f [FONT]                   : フォントを[FONT]にします。
+--fullscreen                : 画面をフルスクリーン表示にします。
+-h もしくは --help          : 英語のヘルプを表示し、終了します。
+-H もしくは --japanese-help : このヘルプを表示し、終了します。
+'''
     finally:
         pass
     print(ver)
@@ -137,7 +193,13 @@ def start():
     readargs()
     #fontname_k = 'Source Code Pro Medium'
     #fontname_k = '7barSPBd'
-    fontname_k = 'FuxedSys'
+    gc = getconf('clock.conf')
+    gca = gc[0]
+    gcb = gc[1]
+    fontname_k = gcb[gca.index('font')]
+    del gc
+    del gca
+    del gcb
     #=============================================================================================
     #Start GUI
     tk = Tk()
@@ -148,6 +210,7 @@ def start():
     tk.update()
     tk.resizable(0, 0) # 画面サイズ変更を禁止
     tk.iconbitmap(tk, 'icon\\cabbage.ico')
+    tk.attributes('-topmost', True)
     # Fin Start GUI
     #=============================================================================================
     fontname = StringVar()
@@ -161,7 +224,6 @@ def start():
     #del_id = [ca.create_rectangle(0, 0, 500, 500, fill=backgroundcolor)]
     id = ca.create_text(fpma(fontname.get())[0], fpma(fontname.get())[1], text='', fill=textcolor, font=(fontname.get(), textsize))
     fs = False
-    tk.attributes('-topmost', True)
     #時間調整
     s = time.localtime().tm_sec
     while True:
