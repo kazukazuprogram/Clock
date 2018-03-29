@@ -166,21 +166,9 @@ def start():
         ver = fv.read()
     with open('help\\en') as fen:
         help = fen.read()
-    try:
-        with open('help\\jp', 'r', 'utf-8') as fjp:
-            jhelp = fjp.read()
-    except:
-        jhelp = '''<<ヘルプ>>
--c [color]                  : 文字色を[color]にします。
--b [color]                  : 背景色を[color]にします。
--v                          : バージョンを表示し、終了します。
--f [FONT]                   : フォントを[FONT]にします。
---fullscreen                : 画面をフルスクリーン表示にします。
--h もしくは --help          : 英語のヘルプを表示し、終了します。
--H もしくは --japanese-help : このヘルプを表示し、終了します。
-'''
-    finally:
-        pass
+    with open('help\\jp', 'br') as fjp:
+        jhelpa = fjp.read()
+        jhelp = jhelpa.decode('utf-8')
     print(ver)
     if '-h' in sys.argv or '--help' in sys.argv:
         print(help)
