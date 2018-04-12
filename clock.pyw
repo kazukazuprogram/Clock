@@ -13,6 +13,32 @@ import time, sys, os
 #FuxedSys               : 320, 70/160, 35
 #メニューバーで+20
 
+class alerm_window():
+    def __init__(self):
+        with open('alerm\\list', 'r') as f:
+            r = f.read()
+        ra = r.split()
+        rb = list()
+        for a in range(0, len(ra)):
+            if len(ra[a]) == 0:
+                del ra[a]
+        self.tk = Toplevel()
+        self.tk.title('Set Alerm')
+        self.lbl = list()
+        for b in  range(0, len(rb)):
+            self.lbl.append(Label(self.tk, text=('Alerm ' + str(b) + ' : ' + '')))
+            self.lbl[b].pack()
+        self.tk.update()
+
+def start_timer():
+    global timer_time
+    with open('timer/timer') as f:
+        r = f.read()
+    ra = r.split(' ')
+    rba = ra[0].split('/')
+    rbb = ra[1].split(':')
+    rb = rba + rbb
+
 def readargs():
     global textcolor
     global backgroundcolor
@@ -139,7 +165,7 @@ def show_version():
     vtk.title('About')
     vca = Canvas(vtk, width=300, height=230, bg='white')
     vca.pack()
-    i = PhotoImage(file='cabbage.png')
+    i = PhotoImage(file='icon\\cabbage.png')
     vid = [vca.create_image(150, 80, image=i),
     vca.create_text(150, 170, text='Cabbage Clock', font=('Helvetica', 30)),
     vca.create_text(150, 215, text=ver)]
@@ -248,6 +274,7 @@ def ev(event):
 
 def main():
     start()
+    #a = alerm_window()
     while True:
         if netcheck:
             crv()
