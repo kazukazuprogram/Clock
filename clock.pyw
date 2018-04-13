@@ -91,17 +91,27 @@ def chfont():
     ca.itemconfig(id, font=(fontname.get(), textsize))
     fontname_mae = fontname.get()
 
+def ChangeTopmostStatus():
+    global TopmostStatusVariable
+    if TopmostStatusVariable.get() == 1:
+        tk.attributes('-topmost', True)
+    else:
+        tk.attributes('-topmost', False)
+
 def cm():
     global tk
+    #global TopmostStatusVariable
     menubar = Menu(tk)
     FileMenu = Menu(menubar, tearoff=0)
+    ViewMenu = Menu(menubar, tearoff=0)
     fontmenu = Menu(menubar, tearoff=0)
     FontChangeMenu = Menu(fontmenu, tearoff=0)
     helpmenu = Menu(menubar, tearoff=0)
     FileMenu.add_command(label='Exit', command=exit_program)
     menubar.add_cascade(label='File', menu=FileMenu)
-    FontChangeMenu.add_radiobutton(label='Source Code Pro Medium', variable=fontname, \
-    value='Source Code Pro Medium', command=chfont)
+    ViewMenu.add_checkbutton(label='Always on top', variable=TopmostStatusVariable, command=ChangeTopmostStatus)
+    menubar.add_cascade(label='View', menu=ViewMenu)
+    FontChangeMenu.add_radiobutton(label='Source Code Pro Medium', variable=fontname, value='Source Code Pro Medium', command=chfont)
     FontChangeMenu.add_radiobutton(label='7barSPBd', variable=fontname, value='7barSPBd', command=chfont)
     FontChangeMenu.add_radiobutton(label='FuxedSys', variable=fontname, value='FuxedSys', command=chfont)
     menubar.add_cascade(label='Font', menu=fontmenu)
@@ -114,7 +124,7 @@ def exit_program():
     global tf
     tf = True
     tk.destroy()
-    saveconf('clock.conf', ['font'], [fontname.get()])
+    saveconf('clock.conf', ['font', 'AlwaysOnTop'], [fontname.get(), str(TopmostStatusVariable.get())])
 
 def getconf(path):
     with open(path) as cf:
@@ -188,6 +198,7 @@ def start():
     global tf
     global fontname_mae
     global ver
+    global TopmostStatusVariable
     with open('help\\ver') as fv:
         ver = fv.read()
     with open('help\\en') as fen:
@@ -205,15 +216,11 @@ def start():
     if '-v' in sys.argv:
         exit()
     readargs()
-    #fontname_k = 'Source Code Pro Medium'
-    #fontname_k = '7barSPBd'
     gc = getconf('clock.conf')
     gca = gc[0]
     gcb = gc[1]
     fontname_k = gcb[gca.index('font')]
     del gc
-    del gca
-    del gcb
     #=============================================================================================
     #Start GUI
     tk = Tk()
@@ -224,11 +231,16 @@ def start():
     tk.update()
     tk.resizable(0, 0) # 画面サイズ変更を禁止
     tk.iconbitmap(tk, 'icon\\cabbage.ico')
-    tk.attributes('-topmost', True)
+    tk.attributes('-topmost', True)    #最前面に表示
     # Fin Start GUI
-    #=============================================================================================
     fontname = StringVar()
     fontname.set(fontname_k)
+    TopmostStatusVariable = IntVar()
+    TopmostStatusVariable.set(int(gcb[gca.index('AlwaysOnTop')]))
+    ChangeTopmostStatus()
+    #=============================================================================================
+    del gca
+    del gcb
     fontname_mae = fontname.get()
     if '-f' in sys.argv:
         fontname.set(sys.argv[sys.argv.index('-f') + 1])
@@ -238,6 +250,7 @@ def start():
     #del_id = [ca.create_rectangle(0, 0, 500, 500, fill=backgroundcolor)]
     id = ca.create_text(fpma(fontname.get())[0], fpma(fontname.get())[1], text='', fill=textcolor, font=(fontname.get(), textsize))
     fs = False
+    cm()
     #時間調整
     s = time.localtime().tm_sec
     while True:
@@ -247,7 +260,6 @@ def start():
     tf = False
     ca.bind_all('<KeyPress-F11>', ev)
     ca.bind_all('<Escape>', ev)
-    cm()
 
 def rv():
     global id
