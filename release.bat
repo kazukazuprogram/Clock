@@ -4,6 +4,7 @@ mkdir release\\help
 copy clock.exe release
 copy README.md release
 copy clock.conf release
+copy LICENCE.txt release
 xcopy icon release\\icon
 xcopy help release\\help
 
