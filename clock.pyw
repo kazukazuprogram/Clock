@@ -265,7 +265,11 @@ def rv():
     global id
     t = time.localtime()
     tt = sk(str(t.tm_hour)) + ':' + sk(str(t.tm_min)) + ':' + sk(str(t.tm_sec))
-    ca.itemconfig(id, text=tt)
+    try:
+        ca.itemconfig(id, text=tt)
+    except:
+        global tf
+        exit_program
 
 def crv():
     global id
@@ -292,7 +296,10 @@ def main():
             crv()
         else:
             rv()
-        tk.update()
+        try:
+            tk.update()
+        except:
+            exit_program()
         time.sleep(0.2)
         if tf:
             break
