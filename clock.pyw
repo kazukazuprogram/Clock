@@ -51,9 +51,6 @@ def readargs():
     if '-b' in arg:
         backgroundcolor = arg[(arg.index('-b') + 1)]
     netcheck = False
-    if '-n' in arg:
-        netcheck = True
-        print('Sync time for Internet.')
     if '--fullscreen' in arg:
         tk.attributes('-fullscreen', True)
 
@@ -271,10 +268,10 @@ def rv():
         global tf
         exit_program
 
-def crv():
-    global id
-    tt = detdate.getdate(1)
-    ca.itemconfig(id, text=tt)
+# def crv():
+#     global id
+#     tt = detdate.getdate(1)
+#     ca.itemconfig(id, text=tt)
 
 def ev(event):
     global fs
@@ -292,10 +289,7 @@ def main():
     start()
     #a = alerm_window()
     while True:
-        if netcheck:
-            crv()
-        else:
-            rv()
+        rv()
         try:
             tk.update()
         except:
