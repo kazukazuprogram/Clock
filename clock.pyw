@@ -5,9 +5,10 @@
 #python C:\Users\owner\code\Clock\clock.pyw
 
 from tkinter import *
-import time, sys, os
+import time, sys, os, lang.ja_JP, lang.en
 #sys.setrecursionlimit(10000)
-
+print(dir(lang.ja_JP))
+print(os.listdir('lang'))
 #Source Code Pro Medium : 450, 60/225,30
 #7barSPBd               : 360, 80/180,50
 #FuxedSys               : 320, 70/160, 35
@@ -95,15 +96,25 @@ def ChangeTopmostStatus():
     else:
         tk.attributes('-topmost', False)
 
+def ReadLanguage():
+    LangList = os.listdir('lang')
+
+def saveconf_ForMenu():
+    saveconf('clock.conf', ['font', 'AlwaysOnTop'], [fontname.get(), str(TopmostStatusVariable.get())])
+
 def cm():
     global tk
     #global TopmostStatusVariable
     menubar = Menu(tk)
     FileMenu = Menu(menubar, tearoff=0)
     ViewMenu = Menu(menubar, tearoff=0)
-    fontmenu = Menu(menubar, tearoff=0)
+    ToolMenu = Menu(menubar, tearoff=0)
+    fontmenu = Menu(ToolMenu, tearoff=0)
     FontChangeMenu = Menu(fontmenu, tearoff=0)
+    LangMenu = Menu(ToolMenu, tearoff=0)
+    ChangeLangMenu = Menu(ToolMenu, tearoff=0)
     helpmenu = Menu(menubar, tearoff=0)
+    FileMenu.add_command(label='Save Cinfiguration', command=saveconf_ForMenu)
     FileMenu.add_command(label='Exit', command=exit_program)
     menubar.add_cascade(label='File', menu=FileMenu)
     ViewMenu.add_checkbutton(label='Always on top', variable=TopmostStatusVariable, command=ChangeTopmostStatus)
@@ -111,8 +122,12 @@ def cm():
     FontChangeMenu.add_radiobutton(label='Source Code Pro Medium', variable=fontname, value='Source Code Pro Medium', command=chfont)
     FontChangeMenu.add_radiobutton(label='7barSPBd', variable=fontname, value='7barSPBd', command=chfont)
     FontChangeMenu.add_radiobutton(label='FuxedSys', variable=fontname, value='FuxedSys', command=chfont)
-    menubar.add_cascade(label='Font', menu=fontmenu)
+
+    ChangeLangMenu.add_radiobutton(label='FuxedSys', variable=fontname, value='FuxedSys', command=chfont)
+    menubar.add_cascade(label='Tool', menu=ToolMenu)
+    ToolMenu.add_cascade(label='Font', menu=fontmenu)
     fontmenu.add_cascade(label='Change...', menu=FontChangeMenu)
+    ToolMenu.add_cascade(label='Language', menu=ChangeLangMenu)
     helpmenu.add_command(label='About', command=show_version)
     menubar.add_cascade(label='Help', menu=helpmenu)
     tk.config(menu=menubar)
