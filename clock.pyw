@@ -5,13 +5,15 @@
 #python C:\Users\owner\code\Clock\clock.pyw
 
 from tkinter import *
-import time, sys, os, lang.ja_JP, lang.en, alerm.alerm
+import time, sys, os, alerm.alerm, lang.ImportList # , lang.ja_JP, lang.en_US
 #sys.setrecursionlimit(10000)
 
 #Source Code Pro Medium : 450, 60/225,30
 #7barSPBd               : 360, 80/180,50
 #FuxedSys               : 320, 70/160, 35
 #メニューバーで+20
+
+LangList = ['JP', 'US']
 
 def start_timer():
     global timer_time
@@ -21,6 +23,11 @@ def start_timer():
     rba = ra[0].split('/')
     rbb = ra[1].split(':')
     rb = rba + rbb
+
+# def ReadLang():
+#     global LangList
+#     global LangMenu
+#     LangMenu
 
 def readargs():
     global textcolor
@@ -78,11 +85,22 @@ def ChangeTopmostStatus():
     else:
         tk.attributes('-topmost', False)
 
+print(dir(lang))
+la = list()
+for x in dir(lang):
+    if x[:2] != '__':
+        la.append(x)
+print(la)
+
 def ReadLanguage():
     LangList = os.listdir('lang')
 
 def saveconf_ForMenu():
-    saveconf('clock.conf', ['font', 'AlwaysOnTop'], [fontname.get(), str(TopmostStatusVariable.get())])
+    saveconf('clock.conf', ['font', 'AlwaysOnTop', 'Language'], [fontname.get(), str(TopmostStatusVariable.get()), str(LanguageVariable.get())])
+
+def restart():
+    exit_program()
+    main()
 
 def cm():
     global tk
@@ -97,6 +115,7 @@ def cm():
     ChangeLangMenu = Menu(ToolMenu, tearoff=0)
     helpmenu = Menu(menubar, tearoff=0)
     FileMenu.add_command(label='Save Cinfiguration', command=saveconf_ForMenu)
+    FileMenu.add_command(label='Restart', command=restart)
     FileMenu.add_command(label='Exit', command=exit_program)
     menubar.add_cascade(label='File', menu=FileMenu)
     ViewMenu.add_checkbutton(label='Always on top', variable=TopmostStatusVariable, command=ChangeTopmostStatus)
@@ -104,8 +123,9 @@ def cm():
     FontChangeMenu.add_radiobutton(label='Source Code Pro Medium', variable=fontname, value='Source Code Pro Medium', command=chfont)
     FontChangeMenu.add_radiobutton(label='7barSPBd', variable=fontname, value='7barSPBd', command=chfont)
     FontChangeMenu.add_radiobutton(label='FuxedSys', variable=fontname, value='FuxedSys', command=chfont)
-
-    ChangeLangMenu.add_radiobutton(label='FuxedSys', variable=fontname, value='FuxedSys', command=chfont)
+    for ChangeLangRange in range(0, len(LangList)):
+        ChangeLangMenu.add_radiobutton(label=LangList[ChangeLangRange], variable=LanguageVariable, value=ChangeLangRange, command=chfont)
+    LanguageVariable.set(0)
     menubar.add_cascade(label='Tool', menu=ToolMenu)
     ToolMenu.add_cascade(label='Font', menu=fontmenu)
     fontmenu.add_cascade(label='Change...', menu=FontChangeMenu)
@@ -118,7 +138,7 @@ def exit_program():
     global tf
     tf = True
     tk.destroy()
-    saveconf('clock.conf', ['font', 'AlwaysOnTop'], [fontname.get(), str(TopmostStatusVariable.get())])
+    saveconf_ForMenu()
 
 def getconf(path):
     with open(path) as cf:
@@ -193,6 +213,7 @@ def start():
     global fontname_mae
     global ver
     global TopmostStatusVariable
+    global LanguageVariable
     with open('help\\ver') as fv:
         ver = fv.read()
     with open('help\\en') as fen:
@@ -229,6 +250,7 @@ def start():
     # Fin Start GUI
     fontname = StringVar()
     fontname.set(fontname_k)
+    LanguageVariable = IntVar()
     TopmostStatusVariable = IntVar()
     TopmostStatusVariable.set(int(gcb[gca.index('AlwaysOnTop')]))
     ChangeTopmostStatus()
@@ -264,11 +286,6 @@ def rv():
     except:
         global tf
         exit_program
-
-# def crv():
-#     global id
-#     tt = detdate.getdate(1)
-#     ca.itemconfig(id, text=tt)
 
 def ev(event):
     global fs
