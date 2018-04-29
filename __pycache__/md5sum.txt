@@ -1,0 +1,3 @@
+97285279aa14795639b16aa012ef0c4e  clock.cpython-36.pyc
+34486c76eec1c1d3c0337052b4612c1b  getdate.cpython-36.pyc
+bb80ed76efb29c8b020178c93f16948d  JPF.cpython-36.pyc
