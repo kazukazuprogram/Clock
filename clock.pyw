@@ -114,7 +114,7 @@ def cm():
     LangMenu = Menu(ToolMenu, tearoff=0)
     ChangeLangMenu = Menu(ToolMenu, tearoff=0)
     helpmenu = Menu(menubar, tearoff=0)
-    FileMenu.add_command(label='Save Cinfiguration', command=saveconf_ForMenu)
+    FileMenu.add_command(label='Save Configuration', command=saveconf_ForMenu)
     FileMenu.add_command(label='Restart', command=restart)
     FileMenu.add_command(label='Exit', command=exit_program)
     menubar.add_cascade(label='File', menu=FileMenu)
