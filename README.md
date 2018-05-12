@@ -2,6 +2,5 @@
 <H2>0.0.0 Released!!!</H2>  
 <H4>Major changes</H4>
   <UL>
-    <LI>Add switch language</LI>
     <LI>Add restart</LI>
   </UL>
