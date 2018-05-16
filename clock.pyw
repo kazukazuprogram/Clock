@@ -13,8 +13,6 @@ import time, sys, os, alerm.alerm, lang.ImportList # , lang.ja_JP, lang.en_US
 #FuxedSys               : 320, 70/160, 35
 #メニューバーで+20
 
-LangList = ['JP', 'US']
-
 def start_timer():
     global timer_time
     with open('timer/timer') as f:
@@ -23,11 +21,6 @@ def start_timer():
     rba = ra[0].split('/')
     rbb = ra[1].split(':')
     rb = rba + rbb
-
-# def ReadLang():
-#     global LangList
-#     global LangMenu
-#     LangMenu
 
 def readargs():
     global textcolor
@@ -85,18 +78,7 @@ def ChangeTopmostStatus():
     else:
         tk.attributes('-topmost', False)
 
-print(dir(lang))
-la = list()
-for x in dir(lang):
-    if x[:2] != '__':
-        la.append(x)
-print(la)
-
-def ReadLanguage():
-    LangList = os.listdir('lang')
-
-def saveconf_ForMenu():
-    saveconf('clock.conf', ['font', 'AlwaysOnTop', 'Language'], [fontname.get(), str(TopmostStatusVariable.get()), str(LanguageVariable.get())])
+saveconf_ForMenu = lambda :saveconf('clock.conf', ['font', 'AlwaysOnTop'], [fontname.get(), str(TopmostStatusVariable.get())])
 
 def restart():
     exit_program()
@@ -111,7 +93,6 @@ def cm():
     ToolMenu = Menu(menubar, tearoff=0)
     fontmenu = Menu(ToolMenu, tearoff=0)
     FontChangeMenu = Menu(fontmenu, tearoff=0)
-    LangMenu = Menu(ToolMenu, tearoff=0)
     ChangeLangMenu = Menu(ToolMenu, tearoff=0)
     helpmenu = Menu(menubar, tearoff=0)
     FileMenu.add_command(label='Save Configuration', command=saveconf_ForMenu)
@@ -123,13 +104,9 @@ def cm():
     FontChangeMenu.add_radiobutton(label='Source Code Pro Medium', variable=fontname, value='Source Code Pro Medium', command=chfont)
     FontChangeMenu.add_radiobutton(label='7barSPBd', variable=fontname, value='7barSPBd', command=chfont)
     FontChangeMenu.add_radiobutton(label='FuxedSys', variable=fontname, value='FuxedSys', command=chfont)
-    for ChangeLangRange in range(0, len(LangList)):
-        ChangeLangMenu.add_radiobutton(label=LangList[ChangeLangRange], variable=LanguageVariable, value=ChangeLangRange, command=chfont)
-    LanguageVariable.set(0)
     menubar.add_cascade(label='Tool', menu=ToolMenu)
     ToolMenu.add_cascade(label='Font', menu=fontmenu)
     fontmenu.add_cascade(label='Change...', menu=FontChangeMenu)
-    ToolMenu.add_cascade(label='Language', menu=ChangeLangMenu)
     helpmenu.add_command(label='About', command=show_version)
     menubar.add_cascade(label='Help', menu=helpmenu)
     tk.config(menu=menubar)
