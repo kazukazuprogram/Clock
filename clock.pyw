@@ -167,7 +167,7 @@ def show_version():
     vca = Canvas(vtk, width=300, height=230, bg='white')
     vca.pack()
     i = PhotoImage(file='icon\\cabbage.png')
-    vid = [vca.create_image(150, 80, image=i),
+    vid = [vca.create_image(150, 80, image=i, anchor=NW),
     vca.create_text(150, 170, text='Cabbage Clock', font=('Helvetica', 30)),
     vca.create_text(150, 215, text=ver)]
     vtk.attributes('-topmost', True)
