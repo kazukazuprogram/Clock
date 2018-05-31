@@ -1,5 +1,5 @@
 #coding: utf-8
-#import getdate
+
 #Clock 0.0.0
 #Copyright 2017 Cabbage All Rights Reserved.
 #python C:\Users\owner\code\Clock\clock.pyw
@@ -96,9 +96,10 @@ def cm():
     ChangeLangMenu = Menu(ToolMenu, tearoff=0)
     helpmenu = Menu(menubar, tearoff=0)
     FileMenu.add_command(label='Save Configuration', command=saveconf_ForMenu)
+    FileMenu.add_separator()
     FileMenu.add_command(label='Restart', command=restart)
     FileMenu.add_command(label='Exit', command=exit_program)
-    menubar.add_cascade(label='File', menu=FileMenu)
+    menubar.add_cascade(label='File', menu=FileMenu) # focusについて調べる
     ViewMenu.add_checkbutton(label='Always on top', variable=TopmostStatusVariable, command=ChangeTopmostStatus)
     menubar.add_cascade(label='View', menu=ViewMenu)
     FontChangeMenu.add_radiobutton(label='Source Code Pro Medium', variable=fontname, value='Source Code Pro Medium', command=chfont)
@@ -107,7 +108,7 @@ def cm():
     menubar.add_cascade(label='Tool', menu=ToolMenu)
     ToolMenu.add_cascade(label='Font', menu=fontmenu)
     fontmenu.add_cascade(label='Change...', menu=FontChangeMenu)
-    helpmenu.add_command(label='About', command=show_version)
+    helpmenu.add_command(label='About', command=show_version, under=0)
     menubar.add_cascade(label='Help', menu=helpmenu)
     tk.config(menu=menubar)
 
