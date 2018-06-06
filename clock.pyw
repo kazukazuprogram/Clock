@@ -5,7 +5,7 @@
 #python C:\Users\owner\code\Clock\clock.pyw
 
 from tkinter import *
-import time, sys, os, alerm.alerm, lang.ImportList # , lang.ja_JP, lang.en_US
+import time, sys, os, alerm.alerm #, lang.ImportList , lang.ja_JP, lang.en_US
 #sys.setrecursionlimit(10000)
 
 #Source Code Pro Medium : 450, 60/225,30
@@ -86,7 +86,6 @@ def restart():
 
 def cm():
     global tk
-    #global TopmostStatusVariable
     menubar = Menu(tk)
     FileMenu = Menu(menubar, tearoff=0)
     ViewMenu = Menu(menubar, tearoff=0)
@@ -94,7 +93,7 @@ def cm():
     fontmenu = Menu(ToolMenu, tearoff=0)
     FontChangeMenu = Menu(fontmenu, tearoff=0)
     ChangeLangMenu = Menu(ToolMenu, tearoff=0)
-    helpmenu = Menu(menubar, tearoff=0)
+    HelpMenu = Menu(menubar, tearoff=0)
     FileMenu.add_command(label='Save Configuration', command=saveconf_ForMenu)
     FileMenu.add_separator()
     FileMenu.add_command(label='Restart', command=restart)
@@ -108,8 +107,8 @@ def cm():
     menubar.add_cascade(label='Tool', menu=ToolMenu)
     ToolMenu.add_cascade(label='Font', menu=fontmenu)
     fontmenu.add_cascade(label='Change...', menu=FontChangeMenu)
-    helpmenu.add_command(label='About', command=show_version, under=0)
-    menubar.add_cascade(label='Help', menu=helpmenu)
+    HelpMenu.add_command(label='About', command=show_version, under=0)
+    menubar.add_cascade(label='Help', menu=HelpMenu)
     tk.config(menu=menubar)
 
 def exit_program():
