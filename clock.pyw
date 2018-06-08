@@ -231,6 +231,7 @@ def start():
     TopmostStatusVariable = IntVar()
     TopmostStatusVariable.set(int(gcb[gca.index('AlwaysOnTop')]))
     ChangeTopmostStatus()
+    tk.protocol("WM_DELETE_WINDOW", exit_program)
     #=============================================================================================
     del gca
     del gcb
