@@ -78,11 +78,11 @@ def ChangeTopmostStatus():
     else:
         tk.attributes('-topmost', False)
 
-saveconf_ForMenu = lambda :saveconf('clock.conf', ['font', 'AlwaysOnTop'], [fontname.get(), str(TopmostStatusVariable.get())])
-
 def restart():
     exit_program()
     main()
+
+saveconf_ForMenu = lambda :saveconf('clock.conf', ['font', 'AlwaysOnTop'], [fontname.get(), str(TopmostStatusVariable.get())])
 
 def cm():
     global tk
