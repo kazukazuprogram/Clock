@@ -17,10 +17,15 @@ def start_timer():
     global timer_time
     with open('timer/timer') as f:
         r = f.read()
-    ra = r.split(' ')
-    rba = ra[0].split('/')
-    rbb = ra[1].split(':')
-    rb = rba + rbb
+    rz = ra.split('\n')
+    ra = list()
+    for x in range(len(rz)):
+        if rz[x] == "":    break
+        else:
+            ra = r.split(' ')
+            rba = ra[0].split('/')
+            rbb = ra[1].split(':')
+            rb = rba + rbb
 
 def readargs():
     global textcolor
@@ -231,7 +236,7 @@ def start():
     TopmostStatusVariable = IntVar()
     TopmostStatusVariable.set(int(gcb[gca.index('AlwaysOnTop')]))
     ChangeTopmostStatus()
-    tk.protocol("WM_DELETE_WINDOW", exit_program)
+    tk.protocol("WM_DELETE_WINDOW", exit_program) # ウインドウを閉じたときにエラーになるのを回避
     #=============================================================================================
     del gca
     del gcb
