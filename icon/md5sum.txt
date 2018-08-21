@@ -1,3 +1,0 @@
-6962926a9f7e9ad00de8f76b87418e65  cabbage.ico
-d1093a840612b5fb06ed77f52a8d45fa  cabbage.png
-d6a46a395d0f9307c6c4ca2a834af80c  lettuce.ico
