@@ -177,7 +177,7 @@ def show_version():
     vca.create_text(150, 215, text=ver)]
     vtk.attributes('-topmost', True)
     vtk.resizable(0, 0) # 画面サイズ変更を禁止
-    raise
+    # raise
     vtk.update()
 
 def start():
