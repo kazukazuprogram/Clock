@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 #coding: utf-8
 
 #Clock 0.0.0
@@ -6,12 +7,28 @@
 
 from tkinter import *
 import time, sys, os, alerm.alerm #, lang.ImportList , lang.ja_JP, lang.en_US
+from json import loads
+from configparser import ConfigParser
+from glob import glob
+from os.path import dirname, splitext
 #sys.setrecursionlimit(10000)
 
 #Source Code Pro Medium : 450, 60/225,30
 #7barSPBd               : 360, 80/180,50
 #FuxedSys               : 320, 70/160, 35
 #メニューバーで+20
+
+#OSの種類によって文字コードを変える
+if os.name == 'nt':
+    enc = 'utf-8'
+else:
+    enc = 'cp932'
+
+def read_language(fp, enc):
+    global lang
+    with open(fp, encoding=enc) as f:
+        r = f.read()
+    return loads(r)
 
 def start_timer():
     global timer_time
@@ -89,31 +106,42 @@ def restart():
 
 saveconf_ForMenu = lambda :saveconf('clock.conf', ['font', 'AlwaysOnTop'], [fontname.get(), str(TopmostStatusVariable.get())])
 
+def ChangeLanguage():
+    cm()
+
 def cm():
     global tk
+    global lang
+    lang = read_language('lang/'+LANGNAME.get()+'.js', enc=enc)
     menubar = Menu(tk)
     FileMenu = Menu(menubar, tearoff=0)
     ViewMenu = Menu(menubar, tearoff=0)
+    LangMenu = Menu(ViewMenu, tearoff=0)
     ToolMenu = Menu(menubar, tearoff=0)
     fontmenu = Menu(ToolMenu, tearoff=0)
     FontChangeMenu = Menu(fontmenu, tearoff=0)
     ChangeLangMenu = Menu(ToolMenu, tearoff=0)
     HelpMenu = Menu(menubar, tearoff=0)
-    FileMenu.add_command(label='Save Configuration', command=saveconf_ForMenu)
+    FileMenu.add_command(label=lang["Save Configuration"], command=saveconf_ForMenu)
     FileMenu.add_separator()
-    FileMenu.add_command(label='Restart', command=restart)
-    FileMenu.add_command(label='Exit', command=exit_program)
-    menubar.add_cascade(label='File', menu=FileMenu) # focusについて調べる
-    ViewMenu.add_checkbutton(label='Always on top', variable=TopmostStatusVariable, command=ChangeTopmostStatus)
-    menubar.add_cascade(label='View', menu=ViewMenu)
+    FileMenu.add_command(label=lang["Restart"], command=restart)
+    FileMenu.add_command(label=lang["Exit"], command=exit_program)
+    menubar.add_cascade(label=lang["File"], menu=FileMenu) # focusについて調べる
+    ViewMenu.add_checkbutton(label=lang["Always on top"], variable=TopmostStatusVariable, command=ChangeTopmostStatus)
+    ViewMenu.add_cascade(label=lang["Language"], menu=LangMenu)
+    for x in glob("./lang/*"):
+        val = x[len(dirname(x))+1:len(x)-len(splitext(x))-1]
+        LangMenu.add_radiobutton(label=val, variable=LANGNAME, value=val, command=ChangeLanguage)
+    del val
+    menubar.add_cascade(label=lang["View"], menu=ViewMenu)
     FontChangeMenu.add_radiobutton(label='Source Code Pro Medium', variable=fontname, value='Source Code Pro Medium', command=chfont)
     FontChangeMenu.add_radiobutton(label='7barSPBd', variable=fontname, value='7barSPBd', command=chfont)
     FontChangeMenu.add_radiobutton(label='FuxedSys', variable=fontname, value='FuxedSys', command=chfont)
-    menubar.add_cascade(label='Tool', menu=ToolMenu)
-    ToolMenu.add_cascade(label='Font', menu=fontmenu)
-    fontmenu.add_cascade(label='Change...', menu=FontChangeMenu)
-    HelpMenu.add_command(label='About', command=show_version, under=0)
-    menubar.add_cascade(label='Help', menu=HelpMenu)
+    menubar.add_cascade(label=lang["Tool"], menu=ToolMenu)
+    ToolMenu.add_cascade(label=lang["Font"], menu=fontmenu)
+    fontmenu.add_cascade(label=lang["Change..."], menu=FontChangeMenu)
+    HelpMenu.add_command(label=lang["About"], command=show_version, under=0)
+    menubar.add_cascade(label=lang["Help"], menu=HelpMenu)
     tk.config(menu=menubar)
 
 def exit_program():
@@ -123,47 +151,19 @@ def exit_program():
     saveconf_ForMenu()
 
 def getconf(path):
-    with open(path) as cf:
-        r = cf.read()
-    ra = r.split('\n')
-    rb = list()
-    for b in range(0, len(ra)):
-        if not '#' in ra[b]  or ra[b] != '' :
-            rb.append(ra[b])
-    rc = list()
-    rd = list()
-    for c in range(0, len(rb)):
-        rc.append(rb[c].split(' ')[0])
-        rd.append(' '.join(rb[c].split(' ')[1:]))
-    return [rc, rd]
+    cfp = ConfigParser()
+    cfp.read(path)
+    font = cfp['core']['Font']
+    aot = cfp['core']['AlwaysOnTop']
+    return font, aot, cfp['core']['Language']
 
 def saveconf(path, name, value):
-    if not os.path.isfile(path): # ファイルが存在しない場合
-        la = list()
-        for a in range(0, len(name)):
-            la.append((name[a] + ' ' + value[a]))
-        lb = '\n'.join(la)
-        with open(path, 'w') as wcf:
-            wcf.write(lb)
-    else: # ファイルが存在する場合
-        wl = getconf('clock.conf')
-        wla = wl[0]
-        wlb = wl[1]
-        for wb in range(0, len(name)):
-            if name[wb] in wla:
-                for wc in range(0, len(wla)):
-                    if name[wb] == wla[wc]:
-                        wlb[wc] = value[wb]
-                        break
-            else:
-                wla.append(name[wb])
-                wlb.append(value[wb])
-        wlc = list()
-        for wd in range(0, len(wla)):
-            wlc.append(wla[wd] + ' ' + wlb[wd])
-        wld = '\n'.join(wlc)
-        with open(path, 'w') as wcfa:
-            wcfa.write(wld)
+    cfp = ConfigParser()
+    cfp.read(path)
+    for x in range(len(name)):
+        cfp['core'][name[x]] = value[x]
+    with open(path, 'w') as fp:
+        cfp.write(fp)
 
 #About
 def show_version():
@@ -195,7 +195,7 @@ def start():
     global fontname_mae
     global ver
     global TopmostStatusVariable
-    global LanguageVariable
+    global LANGNAME
     with open('help\\ver') as fv:
         ver = fv.read()
     with open('help\\en') as fen:
@@ -213,15 +213,13 @@ def start():
     if '-v' in sys.argv:
         exit()
     readargs()
+    # input('stringvar_m')
     gc = getconf('clock.conf')
-    gca = gc[0]
-    gcb = gc[1]
-    fontname_k = gcb[gca.index('font')]
-    del gc
+    fontname_k = gc[0]
+    aot = gc[1]
     #=============================================================================================
     #Start GUI
     tk = Tk()
-    #tk.title('CabbageClock')
     tk.title('Clock')
     ca = Canvas(tk, width=(fpma(fontname_k)[0] * 2), height=((fpma(fontname_k)[1] * 2) + 20), bg=backgroundcolor)
     ca.pack()
@@ -232,14 +230,13 @@ def start():
     # Fin Start GUI
     fontname = StringVar()
     fontname.set(fontname_k)
-    LanguageVariable = IntVar()
     TopmostStatusVariable = IntVar()
-    TopmostStatusVariable.set(int(gcb[gca.index('AlwaysOnTop')]))
+    TopmostStatusVariable.set(int(aot))
     ChangeTopmostStatus()
     tk.protocol("WM_DELETE_WINDOW", exit_program) # ウインドウを閉じたときにエラーになるのを回避
+    LANGNAME = StringVar()
+    LANGNAME.set(gc[2])
     #=============================================================================================
-    del gca
-    del gcb
     fontname_mae = fontname.get()
     if '-f' in sys.argv:
         fontname.set(sys.argv[sys.argv.index('-f') + 1])
