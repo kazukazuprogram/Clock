@@ -2,3 +2,4 @@
 /alerm/__pycache__/
 *.zip
 *.bat
+/lib/__pycache__/
